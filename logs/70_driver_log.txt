@@ -1,0 +1,37 @@
+2021/05/24 14:27:32 Starting App Insight Logger for task:  runTaskLet
+2021/05/24 14:27:32 Attempt 1 of http call to http://10.0.0.5:16384/sendlogstoartifacts/info
+2021/05/24 14:27:32 Attempt 1 of http call to http://10.0.0.5:16384/sendlogstoartifacts/status
+[2021-05-24T14:27:32.782852] Entering context manager injector.
+[context_manager_injector.py] Command line Options: Namespace(inject=['ProjectPythonPath:context_managers.ProjectPythonPath', 'RunHistory:context_managers.RunHistory', 'TrackUserError:context_managers.TrackUserError'], invocation=['hyper_tuning_xgb.py', '--num_boost_round', '3', '--max_depth', '3', '--learning_rate', '0.001', '--gamma', '0', '--reg_lambda', '1', '--scale_pos_weight', '1', '--max_depth', '8', '--min_samples_split', '2', '--n_estimators', '500'])
+Script type = None
+[2021-05-24T14:27:33.989394] Entering Run History Context Manager.
+[2021-05-24T14:27:34.610410] Current directory: /mnt/batch/tasks/shared/LS_root/jobs/quick-starts-ws-145543/azureml/hd_11fba238-657d-4e76-9f06-fdd5a150a1dc_2/mounts/workspaceblobstore/azureml/HD_11fba238-657d-4e76-9f06-fdd5a150a1dc_2
+[2021-05-24T14:27:34.610692] Preparing to call script [hyper_tuning_xgb.py] with arguments:['--num_boost_round', '3', '--max_depth', '3', '--learning_rate', '0.001', '--gamma', '0', '--reg_lambda', '1', '--scale_pos_weight', '1', '--max_depth', '8', '--min_samples_split', '2', '--n_estimators', '500']
+[2021-05-24T14:27:34.610827] After variable expansion, calling script [hyper_tuning_xgb.py] with arguments:['--num_boost_round', '3', '--max_depth', '3', '--learning_rate', '0.001', '--gamma', '0', '--reg_lambda', '1', '--scale_pos_weight', '1', '--max_depth', '8', '--min_samples_split', '2', '--n_estimators', '500']
+
+
+
+[2021-05-24T14:27:34.983263] The experiment failed. Finalizing run...
+Cleaning up all outstanding Run operations, waiting 900.0 seconds
+1 items cleaning up...
+Cleanup took 0.06802153587341309 seconds
+Traceback (most recent call last):
+  File "hyper_tuning_xgb.py", line 6, in <module>
+    from sklearn.metrics import auc, roc_curve
+ModuleNotFoundError: No module named 'sklearn'
+
+[2021-05-24T14:27:35.183161] Finished context manager injector with Exception.
+2021/05/24 14:27:36 Skipping parsing control script error. Reason: Error json file doesn't exist. This most likely means that no errors were written to the file. File path: /mnt/batch/tasks/workitems/1d712f97-0f7e-46dc-ab1c-bc68632d2e6a/job-1/hd_11fba238-657d-4e7_8f23d602-20e3-4838-bdd3-720be7bffc3f/wd/runTaskLetTask_error.json
+2021/05/24 14:27:36 Failed to run the wrapper cmd with err: exit status 1
+2021/05/24 14:27:36 Attempt 1 of http call to http://10.0.0.5:16384/sendlogstoartifacts/status
+2021/05/24 14:27:36 mpirun version string: {
+mpirun (Open MPI) 4.1.0
+
+Report bugs to http://www.open-mpi.org/community/help/
+}
+2021/05/24 14:27:36 Not exporting to RunHistory as the exporter is either stopped or there is no data.
+Stopped: false
+OriginalData: 3
+FilteredData: 0.
+2021/05/24 14:27:36 Process Exiting with Code:  1
+2021/05/24 14:27:36 All App Insights Logs was send successfully
