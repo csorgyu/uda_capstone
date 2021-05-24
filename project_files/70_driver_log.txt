@@ -1,0 +1,37 @@
+2021/05/23 12:31:31 Starting App Insight Logger for task:  runTaskLet
+2021/05/23 12:31:31 Attempt 1 of http call to http://10.0.0.8:16384/sendlogstoartifacts/info
+2021/05/23 12:31:31 Attempt 1 of http call to http://10.0.0.8:16384/sendlogstoartifacts/status
+[2021-05-23T12:31:31.374707] Entering context manager injector.
+[context_manager_injector.py] Command line Options: Namespace(inject=['ProjectPythonPath:context_managers.ProjectPythonPath', 'RunHistory:context_managers.RunHistory', 'TrackUserError:context_managers.TrackUserError'], invocation=['hyper_tuning_rf.py', '--n_estimators', '10', '--max_depth', '3', '--min_samples_split', '2', '--max_depth', '3', '--min_samples_split', '2', '--n_estimators', '200'])
+Script type = None
+[2021-05-23T12:31:32.481666] Entering Run History Context Manager.
+[2021-05-23T12:31:33.114748] Current directory: /mnt/batch/tasks/shared/LS_root/jobs/quick-starts-ws-145450/azureml/hd_83ed8e1c-f060-4b99-aa6f-fd4870c375ad_3/mounts/workspaceblobstore/azureml/HD_83ed8e1c-f060-4b99-aa6f-fd4870c375ad_3
+[2021-05-23T12:31:33.115018] Preparing to call script [hyper_tuning_rf.py] with arguments:['--n_estimators', '10', '--max_depth', '3', '--min_samples_split', '2', '--max_depth', '3', '--min_samples_split', '2', '--n_estimators', '200']
+[2021-05-23T12:31:33.115098] After variable expansion, calling script [hyper_tuning_rf.py] with arguments:['--n_estimators', '10', '--max_depth', '3', '--min_samples_split', '2', '--max_depth', '3', '--min_samples_split', '2', '--n_estimators', '200']
+
+
+
+[2021-05-23T12:31:33.125202] The experiment failed. Finalizing run...
+Cleaning up all outstanding Run operations, waiting 900.0 seconds
+1 items cleaning up...
+Cleanup took 0.06842660903930664 seconds
+Traceback (most recent call last):
+  File "hyper_tuning_rf.py", line 5, in <module>
+    from sklearn.metrics import auc, roc_curve
+ModuleNotFoundError: No module named 'sklearn'
+
+[2021-05-23T12:31:33.312795] Finished context manager injector with Exception.
+2021/05/23 12:31:34 Skipping parsing control script error. Reason: Error json file doesn't exist. This most likely means that no errors were written to the file. File path: /mnt/batch/tasks/workitems/039fb3d9-668e-40fe-bc59-f7718c99b974/job-1/hd_83ed8e1c-f060-4b9_9777e912-34f3-45ee-8b58-1def1e95d345/wd/runTaskLetTask_error.json
+2021/05/23 12:31:34 Failed to run the wrapper cmd with err: exit status 1
+2021/05/23 12:31:34 Attempt 1 of http call to http://10.0.0.8:16384/sendlogstoartifacts/status
+2021/05/23 12:31:34 mpirun version string: {
+Intel(R) MPI Library for Linux* OS, Version 2018 Update 3 Build 20180411 (id: 18329)
+Copyright 2003-2018 Intel Corporation.
+}
+2021/05/23 12:31:34 MPI publisher: intel ; version: 2018
+2021/05/23 12:31:34 Not exporting to RunHistory as the exporter is either stopped or there is no data.
+Stopped: false
+OriginalData: 3
+FilteredData: 0.
+2021/05/23 12:31:34 Process Exiting with Code:  1
+2021/05/23 12:31:35 All App Insights Logs was send successfully
