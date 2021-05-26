@@ -97,6 +97,10 @@ and xgb
 *TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
 
 
+## Deleting compute for Hyperdrive
+![image](https://user-images.githubusercontent.com/81808810/119647826-04e13b80-be21-11eb-87e5-bef8a916b538.png)
+
+
 ## Screen Recording
 *TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
 - A working model
