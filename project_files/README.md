@@ -38,6 +38,10 @@ Example shows hyperdrive script based access
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
 
+![image](https://user-images.githubusercontent.com/81808810/119644203-e8430480-be1c-11eb-9950-7d348d5c316d.png)
+Multiple runs
+
+
 ### Model01: The Random Forest
 
 #### Training progress
