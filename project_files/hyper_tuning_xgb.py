@@ -57,11 +57,13 @@ def main():
     run.log("Lambda (L2 regularization):", np.int(args.reg_lambda))
 
     xgb_model = xgb.XGBClassifier(objective="binary:logistic",
-                        params=params,
-                        nfold=5,
-                        metrics="auc",
-                        as_pandas=True,
-                        seed=123)
+                        n_estimators = np.int(args.num_boost_round),
+                        max_depth = np.int(args.max_depth),
+                        learning_rate=np.float(args.learning_rate),
+                        gamma= np.float(args.gamma),
+                        reg_lambda=np.float(args.reg_lambda),
+                        scale_pos_weight=np.float(args.scale_pos_weight),
+                        random_state=123)
     xgb_model.fit(X_train, y_train)
     y_pred = xgb_model.predict(X_test)
     fpr, tpr, thresholds = roc_curve(y_test, y_pred, pos_label=1)
