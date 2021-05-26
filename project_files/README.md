@@ -42,6 +42,8 @@ root
 
 I registered the dataset manually as a tabular dataset, I used the default storage as a datastore. Other datastores can be registered of various types.
 
+I was using a 4 node compute cluster for both Auto ML and Hyperdrive based training and ACI based service deployment.
+
 ## Dataset
 
 ### Dataset overview ###
