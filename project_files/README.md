@@ -3,18 +3,41 @@
 The goal of the project is creating a classification model with the 2 primary toolkits Azure ML Workspace offers for a selected dataset.
 For my own work I chose the [Heart failure clinical data|https://www.kaggle.com/andrewmvd/heart-failure-clinical-data].
 
-There are 2 major tasks to be delivered
-[ ] Delivering a model with the Auto ML functionality
-[x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML 
+There are 2 major modeling tasks and with deployment tasks included to be delivered
+- [ ] Delivering a model with the Auto ML functionality
+- [x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML 
 
-The best model needs to be deployed and tested for consumption.
+The best model needs to be deployed and tested for consumption in both of the cases.
 
 As a preparation for the project I have created a baseline model on my own computer, to manage my expectations about the prediction excercise.
 As the dataset is not huge (300 observations in total), this was easily managable on a single worsktation. From this perspective the dataset does not set challenges in dataset sizing, sampling, management perspective. From the other side it can be easily attached to the git repository as it is the case in this project.
 
+During baselining I was experimenting with Random Forest and XGBoost models. Random Forest is a good, well interpretable, robust model for non-linear problems, scaling does not impact the model much.
+XGBoost is currently a widely used model, can de used with linear base models and tree based too, I was opting for the second. It iterativerly corrects weak predictors through boosting rounds.
+I created a hyperdrive configuration for both of these models, and eventually the AutoML best model was an ensemble built on these type of models.
+
 
 ## Project Set Up and Installation
-*OPTIONAL:* If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to explain how to set up this project in AzureML.
+The project assumes the usage of Azure ML Workspace. I was using the lab environment provisioned by udacity, but it does not have any specific settings, that assumes that environment - in fact I was provided different environment in all of the cases, where the dataset and the notebooks, python scripts were usable.
+
+Azre ML workspace provisioning can be done multiple ways, manually from the portal, with ARM template deloyment and from terraform, and it includes several components
+* A storage device that serves as a backend for storing data, model reszlts and execution logs
+* Azure ML Workspace PaaS service itself
+* A keyvault, where secrets and certificates can be stored
+* Azure Container Registry for model deployment as a service
+* Application Insights for monitoring
+
+The workspace itself uses spark cluster under the hood for compute and inference clusters.
+
+The workspace can be accessed through various API versions, I was personally using the python SDK.
+
+To reproduce my work, the dataset from the ../data folder needs to be registered as a dataset and 4 files need to be uploaded to the the worspace, attached to a compute instance in the following structure:
+root
+- hyperparameter_tuning.ipynb
+- automl.ipynb
+- SCRIPT(folder)
+  - hyper_tuning_rf.py
+  - hyper_tuning_xgb.py
 
 ## Dataset
 
