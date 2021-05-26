@@ -21,6 +21,9 @@ I created a hyperdrive configuration for both of these models, and eventually th
 ## Project Set Up and Installation
 The project assumes the usage of Azure ML Workspace. I was using the lab environment provisioned by udacity, but it does not have any specific settings, that assumes that environment - in fact I was provided different environment in all of the cases, where the dataset and the notebooks, python scripts were usable.
 
+
+![image](https://user-images.githubusercontent.com/81808810/119731957-dfcbe780-be77-11eb-9a69-00ffe25b120b.png)
+
 Azre ML workspace provisioning can be done multiple ways, manually from the portal, with ARM template deloyment and from terraform, and it includes several components
 * A storage device that serves as a backend for storing data, model reszlts and execution logs
 * Azure ML Workspace PaaS service itself
