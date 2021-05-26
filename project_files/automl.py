@@ -89,10 +89,11 @@ dataset.take(5).to_pandas_dataframe()
 
 
 ########################################################
+project_folder='./real'
 automl_settings = {
     "experiment_timeout_minutes": 15,
     "max_concurrent_iterations": 4,
-    "primary_metric" : 'AUC'
+    "primary_metric" : 'AUC_weighted'
 }
 automl_config = AutoMLConfig(compute_target=compute_target,
                              task = "classification",
@@ -109,14 +110,16 @@ automl_config = AutoMLConfig(compute_target=compute_target,
 
 #################
 
-automl_experiment = Experiment(ws, "EXP_HEART_FAILURE_AML")
-automl_run1 = automl_experiment.submit(automl_config, show_output=True)
+automl_run1 = experiment.submit(automl_config, show_output=True)
 
 ####
 rns = automl_experiment.get_runs()
 next(rns)
 #####
+from azureml.widgets import RunDetails
+widget1 = RunDetails(automl_run1)
+widget1.show()
+###
 
-best_auto_run = automl_run1.get_best_child()
-
-print("Best run ID: "+ str(best_auto_run.id))
+best_run = automl_run1.get_best_child()
+best_run.get_metrics()
