@@ -1,8 +1,17 @@
-*NOTE:* This file is a template that you can use to create the README for your project. The *TODO* comments below will highlight the information you should be sure to include.
+# Heart failure prediction with Azure ML Workspace toolkit
+ 
+The goal of the project is creating a classification model with the 2 primary toolkits Azure ML Workspace offers for a selected dataset.
+For my own work I chose the [Heart failure clinical data|https://www.kaggle.com/andrewmvd/heart-failure-clinical-data].
 
-# Your Project Title Here
+There are 2 major tasks to be delivered
+[ ] Delivering a model with the Auto ML functionality
+[x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML 
 
-*TODO:* Write a short introduction to your project.
+The best model needs to be deployed and tested for consumption.
+
+As a preparation for the project I have created a baseline model on my own computer, to manage my expectations about the prediction excercise.
+As the dataset is not huge (300 observations in total), this was easily managable on a single worsktation. From this perspective the dataset does not set challenges in dataset sizing, sampling, management perspective. From the other side it can be easily attached to the git repository as it is the case in this project.
+
 
 ## Project Set Up and Installation
 *OPTIONAL:* If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to explain how to set up this project in AzureML.
