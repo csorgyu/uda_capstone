@@ -11,6 +11,7 @@ The best model needs to be deployed and tested for consumption in both of the ca
 
 As a preparation for the project I have created a baseline model on my own computer, to manage my expectations about the prediction excercise.
 As the dataset is not huge (300 observations in total), this was easily managable on a single worsktation. From this perspective the dataset does not set challenges in dataset sizing, sampling, management perspective. From the other side it can be easily attached to the git repository as it is the case in this project.
+More on the dataset can be read in Dataset overview
 
 During baselining I was experimenting with Random Forest and XGBoost models. Random Forest is a good, well interpretable, robust model for non-linear problems, scaling does not impact the model much.
 XGBoost is currently a widely used model, can de used with linear base models and tree based too, I was opting for the second. It iterativerly corrects weak predictors through boosting rounds.
@@ -33,16 +34,48 @@ The workspace can be accessed through various API versions, I was personally usi
 
 To reproduce my work, the dataset from the ../data folder needs to be registered as a dataset and 4 files need to be uploaded to the the worspace, attached to a compute instance in the following structure:
 root
-- hyperparameter_tuning.ipynb
-- automl.ipynb
-- SCRIPT(folder)
-  - hyper_tuning_rf.py
-  - hyper_tuning_xgb.py
+- *hyperparameter_tuning.ipynb*
+- *automl.ipynb*
+- **SCRIPT**
+  - *hyper_tuning_rf.py*
+  - *hyper_tuning_xgb.py*
+
+I registered the dataset manually as a tabular dataset, I used the default storage as a datastore. Other datastores can be registered of various types.
 
 ## Dataset
 
-### Overview
-*TODO*: Explain about the data you are using and where you got it from.
+### Dataset overview ###
+I downloaded the data from the kaggle link provided above and registered it to the workspace. This could be done through code, however that call is slow, so I wanted to focus lab time on AutoML runs and hyperdrive runs.
+
+The dataset itself contains 13 columns, that describe clinical conditions of 300 observed patients and whether they died or not.
+The conditions include:
+* age: the age of the patient 
+* anaemia: decrease of the red blood cells in the hemoglobin (encoded by 0 and 1)
+* creatinine_phosphokinase: level of CPK enzyme in the blood (mcg/L, ranges between 23 and 7861)
+* diabetes: if the patient has diabetes (encoded by 0 and 1)
+* ejection_fraction: the percentage of blood leaving the heart at each contraction (percentage, ranges between 14 and 80) 
+* high_blood_pressure: if patient has hypertension (encoded by 0 and 1 )
+* platelets: Platelets in the blood (kiloplatelets/mL, ranges between 25,100 and 850,000)
+* serum_creatinine: Level of serum creatinine in the blood (mg/dL, ranges between 0.5 and 9.4)
+* serum_sodium: Level of serum sodium in the blood (mEq/L, ranges between 113 and 148)
+* sex: woman or man (binary, encoded by 0 and 1)
+* smoking: If the patient smokes or not (boolean, encoded by 0 and 1)
+* time: follow up periods (days, ranges from 4 to 285)
+
+As we can see, the predictors are all numeric, however the ranges, shown above and the distributions shwn in the 2 examples below suggest, that the predictors are not on the same scale and do not show similar distribution at all, so the problem is really a non-linear one by nature.
+
+
+![image](https://user-images.githubusercontent.com/81808810/119728522-df315200-be73-11eb-84e2-3912c3951113.png)
+
+**Age distribution example**
+The age distribution shows, that the patients, who died were slightly older on average compared to those who survived.
+
+
+
+![image](https://user-images.githubusercontent.com/81808810/119729924-7b0f8d80-be75-11eb-96e7-743e25c66bfc.png)
+
+**Distribution of the CPK enzyme levels example**
+The distribution of the CPK enzyme is really skewed in both of the cases, mean, Q3 quartile are very similar. The patients who survived show slightly more outliers, but the skewness of the CPK enzyme levels for those who died, is bigger.
 
 #### Datasets on portal
 ![image](https://user-images.githubusercontent.com/81808810/119352400-ef91d300-bca1-11eb-81a3-4a1eaf3ae9e6.png)
