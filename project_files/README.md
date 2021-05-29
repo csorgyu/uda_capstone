@@ -172,6 +172,18 @@ Metrics
 ![image](https://user-images.githubusercontent.com/81808810/120070773-6a853000-c08c-11eb-8f22-2329a34b5cd8.png)
 We have the onnx model version generated too in the output folder, on the top of the regular model.pkl file
 
+#### Saving ONNX model
+![image](https://user-images.githubusercontent.com/81808810/120071523-1bd99500-c090-11eb-811c-d55475fd2645.png)
+
+#### Inference config
+![image](https://user-images.githubusercontent.com/81808810/120072224-02861800-c093-11eb-9826-ac3ab7e5e918.png)
+
+
+![image](https://user-images.githubusercontent.com/81808810/120072216-f732ec80-c092-11eb-9f98-ccad7619e6df.png)
+
+![image](https://user-images.githubusercontent.com/81808810/120072374-ed5db900-c093-11eb-8ce1-b5f1bf77b0bf.png)
+
+
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
 
