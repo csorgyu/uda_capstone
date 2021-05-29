@@ -84,21 +84,20 @@ The distribution of the CPK enzyme is really skewed in both of the cases, mean, 
 
 #### Datasets on portal
 ![image](https://user-images.githubusercontent.com/81808810/119352400-ef91d300-bca1-11eb-81a3-4a1eaf3ae9e6.png)
-
-
-### Task
-*TODO*: Explain the task you are going to be solving with this dataset and the features you will be using for it.
+The portal shows that after the manual registration the dataset is available.
 
 ### Access
 #### Hyperdrive access
-*TODO*: Explain how you are accessing the data in your workspace.
 ![image](https://user-images.githubusercontent.com/81808810/119352531-16500980-bca2-11eb-9f67-101d43b88b0d.png)
-Example shows hyperdrive script based access
+Example shows hyperdrive script based access. The code either checks the registered datasets for a given key, or pulls the data from an URL to register it with a given name. In case of hyperdrive I am using that from the python scripts.
 
 #### Auto ML code access
 ![image](https://user-images.githubusercontent.com/81808810/120069678-715d7400-c087-11eb-9ecf-cb52c28c4169.png)
+In the case of the Auto ML, I am checking the dataset from the ipynb  notebook, and adding the content to a variable, which I pass over to the Auto ML runs.
 
 ## Automated ML
+In case of Automated ML I am letting the AutoML functionality to run experiments with an initial configuration I set and optimize the models along a primary metric. These runs are registered and the outputs are available on the storage device associated to the workspace.
+
 ### AutoML settings and config
 ![image](https://user-images.githubusercontent.com/81808810/120069647-525ee200-c087-11eb-9b40-b6b3b4398b52.png)
 The screenshot above shows the AutoML settings and config I used for the experiment.
@@ -116,10 +115,10 @@ The additional AutoML configs are the following
 * path: project folder TODO fix this later
 * enable_early_stopping: if the score is not improving in short term, the further experimentation will stop. Default setting is **False**, so I need to control the behavior
 * featurization: My setting is **auto**. This will apply the following automatic featurizations below. As I happen to have numeric features without missing values, this specific setting does not do any improvement or change
- * Categorical: Target encoding, one hot encoding, drop high cardinality categories, impute missing values.
- * Numeric: Impute missing values, cluster distance, weight of evidence.
- * DateTime: Several features such as day, seconds, minutes, hours etc.
- * Text: Bag of words, pre-trained Word embedding, text target encoding.
+  * Categorical: Target encoding, one hot encoding, drop high cardinality categories, impute missing values.
+  * Numeric: Impute missing values, cluster distance, weight of evidence.
+  * DateTime: Several features such as day, seconds, minutes, hours etc.
+  * Text: Bag of words, pre-trained Word embedding, text target encoding.
 * debug_log: the file where the debug information will flow
 * model_explainability: Whether to enable explaining the best AutoML model at the end of all AutoML training iterations. The default is **True**, but I have emphasized this setting in the config, as I am reflecting on explanaions later
 * enable_onnx_compatible_models: Whether to enable or disable enforcing the ONNX-compatible models. The default is *False*, but I want ONNX compatilble models, as that is an exra requirement of the project, so my setting is **True**  
@@ -146,7 +145,7 @@ The 2 images above show, that AutoML has run 51 iterations, and tbe best AUC sco
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
 ![image](https://user-images.githubusercontent.com/81808810/119652785-d49c9b80-be26-11eb-801b-8d3024ed13c1.png)
 
-Explanations
+#### Explanations
 ![image](https://user-images.githubusercontent.com/81808810/119652882-f39b2d80-be26-11eb-99e4-f169fa528a9d.png)
 
 ![image](https://user-images.githubusercontent.com/81808810/120071014-850bd900-c08d-11eb-850e-ea400181b899.png)
@@ -154,13 +153,13 @@ Explanations
 
 #### Conda environment
 ![image](https://user-images.githubusercontent.com/81808810/120070858-ccde3080-c08c-11eb-8fb9-42e53db075ff.png)
-For reproducibility, TODO, elborate further
+For reproducibility, the AutoML registers the environment dependencies it ran with.
+This is used further when we are deploying a model, because we need to pass the environment to the running container.
 
 #### Confusion matrix
 ![image](https://user-images.githubusercontent.com/81808810/120070823-a28c7300-c08c-11eb-96bc-32bfe4f00674.png)
 Can be obtained from the run details, from the backend. Probably more useful if queried programmatically.
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 #### Progress - Widget
 ![image](https://user-images.githubusercontent.com/81808810/119653166-4c6ac600-be27-11eb-8e51-14127ecc9c87.png)
 One can followup the progress on the RunDetails widget. It helps with progress, whather certain runs have failed or not, the current iterations metric, theformer best metric, the duration, start and end time. It also shows the pipeline, that was created automatically. After finalizing it shows the best metrics scores (in my case AUC_weighted) on a diagram.
@@ -189,9 +188,16 @@ We have the onnx model version generated too in the output folder, on the top of
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
 
-![image](https://user-images.githubusercontent.com/81808810/119644203-e8430480-be1c-11eb-9950-7d348d5c316d.png)
-Multiple runs
+I was experimenting on 3 layers:
+* First I checked the performance of 2 model types: Random Forest and XGBOOST
+* Second, I ran a random parameter sampling based hyperparameter run with the better model (XGBOOST)
+* Third, I checked what parameters I assumed have less impact on the model, and have run a Bayesian parameter sampling based hyperdrive run on the rest of the parameters
+* As an outcome, my best model was unluckily performing worse still, than the AutoML
+* Within the scope of tha project I was focusing on exploration of the techniques, so after this 3 layered approach iI gave up optimizing and opted for the best AutoML model as an end result
 
+![image](https://user-images.githubusercontent.com/81808810/119644203-e8430480-be1c-11eb-9950-7d348d5c316d.png)
+The screenshot above shows the multiple runs of hyperdrive experimentations.
+The sections below contain the datails.
 
 ### Model01: The Random Forest
 
