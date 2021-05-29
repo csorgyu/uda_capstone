@@ -96,12 +96,50 @@ The distribution of the CPK enzyme is really skewed in both of the cases, mean, 
 Example shows hyperdrive script based access
 
 #### Auto ML code access
+![image](https://user-images.githubusercontent.com/81808810/120069678-715d7400-c087-11eb-9ecf-cb52c28c4169.png)
 
 ## Automated ML
-*TODO*: Give an overview of the `automl` settings and configuration you used for this experiment
+### AutoML settings and config
+![image](https://user-images.githubusercontent.com/81808810/120069647-525ee200-c087-11eb-9b40-b6b3b4398b52.png)
+The screenshot above shows the AutoML settings and config I used for the experiment.
+
+The 3 settings I am controlling in the settings are:
+* experiment_timeout_minutes: This is a control on the resources I want to allocate to the automated ml experimentations
+* max_concurrent_iterations: As we have 4 compute nodes, this is the minimum value that makes sense if I want to be time efficient and maximum value at the same time, as I need to comply with the lab limits
+* primary_metric: The different runs of AutoML are optimized by this metric and also compared with each other. There is a set of metrics I can provide, I am optimizing along AUC weighted
+
+The additional AutoML configs are the following
+* compute_target: Here I am assigning a compute cluster reference to the AutoML I created formerly (called "auto-ml" in my notebook with 4 nodes)
+* task: this is a classification task, in other cases I could opt for regression or timeseries analysis, too
+* training_data: this is the data I let the models to train on. If I do not specify validation_data, but also do not specify n_cross_validations, default value is used for csorr validation based on the ![documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-cross-validation-data-splits) . For datasets smaller than 20,000 rows cross validation is used. For datasets smaller than 1000 rows there is 10 fold cross-validation is used, for larger datasets 3 fold. In my case the dataset is very small, so 10 fold will be used. This is good for my purpose.
+* label_column_name: this is the target of the predictions, all the rest of the columns will be predictors
+* path: project folder TODO fix this later
+* enable_early_stopping: if the score is not improving in short term, the further experimentation will stop. Default setting is **False**, so I need to control the behavior
+* featurization: My setting is **auto**. This will apply the following automatic featurizations below. As I happen to have numeric features without missing values, this specific setting does not do any improvement or change
+ * Categorical: Target encoding, one hot encoding, drop high cardinality categories, impute missing values.
+ * Numeric: Impute missing values, cluster distance, weight of evidence.
+ * DateTime: Several features such as day, seconds, minutes, hours etc.
+ * Text: Bag of words, pre-trained Word embedding, text target encoding.
+* debug_log: the file where the debug information will flow
+* model_explainability: Whether to enable explaining the best AutoML model at the end of all AutoML training iterations. The default is **True**, but I have emphasized this setting in the config, as I am reflecting on explanaions later
+* enable_onnx_compatible_models: Whether to enable or disable enforcing the ONNX-compatible models. The default is *False*, but I want ONNX compatilble models, as that is an exra requirement of the project, so my setting is **True**  
 
 ### AutoML Run
 ![image](https://user-images.githubusercontent.com/81808810/119652654-aae37480-be26-11eb-8e3a-bd7c3f3f0910.png)
+
+#### Data guardrails - 10 fold cross validation proof
+![image](https://user-images.githubusercontent.com/81808810/120070487-14fc5380-c08b-11eb-8dcf-cf9ad8b87990.png)
+The output of the automl run shows, that the 10-fold cross-validation has actually been applied
+
+#### Data guardrails - Class balancing, missing features and high cardinality check
+![image](https://user-images.githubusercontent.com/81808810/120070530-4bd26980-c08b-11eb-924a-24c0c30c48cd.png)
+In this dataset, as I formerly mentioned based on the EDA, there are no issing values and the outcomes are balanced. I personally have not performed high cardinality checks, but this AutoML run has done that favor for me
+
+#### Iterations
+![image](https://user-images.githubusercontent.com/81808810/120070578-86d49d00-c08b-11eb-97f3-d45c0c6c2cf5.png)
+
+![image](https://user-images.githubusercontent.com/81808810/120070591-95bb4f80-c08b-11eb-98d6-9f7d70712b5c.png)
+The 2 images above show, that AutoML has run 51 iterations, and tbe best AUC score was obtained by a VotingEnsamble model. Enabling voting ensembles is an additional feature of AutoML config, the default value is **True** I used this one. These models are ensembles over ensembles, so in certain business cases these may not be allowed, because interpretability may be not straightforward enough.
 
 
 ### Results
@@ -111,7 +149,16 @@ Example shows hyperdrive script based access
 Explanations
 ![image](https://user-images.githubusercontent.com/81808810/119652882-f39b2d80-be26-11eb-99e4-f169fa528a9d.png)
 
+![image](https://user-images.githubusercontent.com/81808810/120071014-850bd900-c08d-11eb-850e-ea400181b899.png)
 
+
+#### Conda environment
+![image](https://user-images.githubusercontent.com/81808810/120070858-ccde3080-c08c-11eb-8fb9-42e53db075ff.png)
+For reproducibility, TODO, elborate further
+
+#### Confusion matrix
+![image](https://user-images.githubusercontent.com/81808810/120070823-a28c7300-c08c-11eb-96bc-32bfe4f00674.png)
+Can be obtained from the run details
 
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
@@ -121,6 +168,9 @@ Widget
 Metrics
 ![image](https://user-images.githubusercontent.com/81808810/119653970-3c071b00-be28-11eb-98da-242b71847de5.png)
 
+### ONNX model
+![image](https://user-images.githubusercontent.com/81808810/120070773-6a853000-c08c-11eb-8f22-2329a34b5cd8.png)
+We have the onnx model version generated too in the output folder, on the top of the regular model.pkl file
 
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
@@ -162,8 +212,10 @@ and xgb
 
 
 #### Deployed model
+##### The hyperdrive generated one 
 ![image](https://user-images.githubusercontent.com/81808810/119354680-a55e2100-bca4-11eb-92bd-09e340f57ef1.png)
-
+##### The AutoML generated one
+![image](https://user-images.githubusercontent.com/81808810/120070925-26def600-c08d-11eb-8d9d-a4573fa89098.png)
 
 
 
