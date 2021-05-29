@@ -164,6 +164,22 @@ Can be obtained from the run details, from the backend. Probably more useful if 
 ![image](https://user-images.githubusercontent.com/81808810/119653166-4c6ac600-be27-11eb-8e51-14127ecc9c87.png)
 One can followup the progress on the RunDetails widget. It helps with progress, whather certain runs have failed or not, the current iterations metric, theformer best metric, the duration, start and end time. It also shows the pipeline, that was created automatically. After finalizing it shows the best metrics scores (in my case AUC_weighted) on a diagram.
 
+#### Results: Charts
+![image](https://user-images.githubusercontent.com/81808810/120074651-17b47400-c09e-11eb-9187-458a54d74f6e.png)
+ROC-precision curve available on the widget, no need to go to the actual run details on the poral
+
+![image](https://user-images.githubusercontent.com/81808810/120074679-3dda1400-c09e-11eb-9ccb-4d252ed87f84.png)
+The confusion matrix is available in nice visual format
+
+![image](https://user-images.githubusercontent.com/81808810/120074693-51857a80-c09e-11eb-8f52-26846662e1c4.png)
+Feature importance is shown, also these are the results of featurization
+
+
+
+#### Results: Transformations - Widget
+![image](https://user-images.githubusercontent.com/81808810/120074605-eb005c80-c09d-11eb-8b6d-5aa8e1f9b14e.png)
+Transformation graph can be checked directly from the widget
+
 #### Metrics
 ![image](https://user-images.githubusercontent.com/81808810/119653970-3c071b00-be28-11eb-98da-242b71847de5.png)
 The screenshot above shows that all metrics can be retrieved, not just the primary one, so recall, F1-score, accuracy, precision and other scores too.
@@ -183,6 +199,17 @@ We have the onnx model version generated too in the output folder, on the top of
 ![image](https://user-images.githubusercontent.com/81808810/120072216-f732ec80-c092-11eb-9f98-ccad7619e6df.png)
 
 ![image](https://user-images.githubusercontent.com/81808810/120072374-ed5db900-c093-11eb-8ce1-b5f1bf77b0bf.png)
+
+![image](https://user-images.githubusercontent.com/81808810/120074981-b5f50980-c09f-11eb-9ebf-2e93033beb75.png)
+Latest and greatest
+
+#### Registering PKL and ONNX models both
+![image](https://user-images.githubusercontent.com/81808810/120074921-6f071400-c09f-11eb-939d-e0054fa33cec.png)
+
+![image](https://user-images.githubusercontent.com/81808810/120074930-7d553000-c09f-11eb-9f51-bc3846edf3dc.png)
+
+#### Deploying PKL model
+![image](https://user-images.githubusercontent.com/81808810/120075031-f3599700-c09f-11eb-819b-cc3669501d85.png)
 
 
 ## Hyperparameter Tuning
