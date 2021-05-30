@@ -40,11 +40,15 @@ To reproduce my work, the dataset from the ../data folder needs to be registered
 root
 - *hyperparameter_tuning.ipynb*
 - *automl.ipynb*
+- *scoring_file_v_2_0_0.py*
+- *scoring_file_v_2_0_0_onnx.py*
 - **SCRIPT**
   - *hyper_tuning_rf.py*
   - *hyper_tuning_xgb.py*
 
 I registered the dataset manually as a tabular dataset, I used the default storage as a datastore. Other datastores can be registered of various types.
+
+The *scoring_file_v_2_0_0.py* and the *scoring_file_v_2_0_0_onnx.py* were collected from the model outputs of the best automl model, and I editet the *_onnx* postfixed one to refer to the .onnx model output.
 
 I was using a 4 node compute cluster for both Auto ML and Hyperdrive based training and ACI based service deployment.
 
@@ -90,6 +94,8 @@ The distribution of the CPK enzyme is really skewed in both of the cases, mean, 
 The portal shows that after the manual registration the dataset is available after manual registration.
 
 ### Data access ccess
+I am using a programmatic data access from the notebook side. I was facing network slowness and problems through my modeling, so I decided not to waste time with programmatic registration at each an every lab attempt, just register the downloaded dataset manually.
+
 #### Hyperdrive access
 ![image](https://user-images.githubusercontent.com/81808810/119352531-16500980-bca2-11eb-9f67-101d43b88b0d.png)
 Example shows hyperdrive script based access. The code either checks the registered datasets for a given key, or pulls the data from an URL to register it with a given name. In case of hyperdrive I am using that from the python scripts.
