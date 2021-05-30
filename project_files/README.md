@@ -3,9 +3,10 @@
 The goal of the project is creating a classification model with the 2 primary toolkits Azure ML Workspace offers for a selected dataset.
 For my own work I chose the [Heart failure clinical data|https://www.kaggle.com/andrewmvd/heart-failure-clinical-data].
 
-There are 2 major modeling tasks and with deployment tasks included to be delivered
-- [ ] Delivering a model with the Auto ML functionality
-- [x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML 
+There are 2 major modeling tasks and with deployment tasks included to be delivered and one elective
+- [x] Delivering a model with the Auto ML functionality (2 deployment formats, pkl and onnx based model)
+- [x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML (3 hyperdrive runs, 2 models, 2 different parameter space sampling on the second)
+- [x] Saving the model in ONNX format 
 
 The best model needs to be deployed and tested for consumption in both of the cases.
 
@@ -82,11 +83,13 @@ The age distribution shows, that the patients, who died were slightly older on a
 **Distribution of the CPK enzyme levels example**
 The distribution of the CPK enzyme is really skewed in both of the cases, mean, Q3 quartile are very similar. The patients who survived show slightly more outliers, but the skewness of the CPK enzyme levels for those who died, is bigger.
 
-#### Datasets on portal
-![image](https://user-images.githubusercontent.com/81808810/119352400-ef91d300-bca1-11eb-81a3-4a1eaf3ae9e6.png)
-The portal shows that after the manual registration the dataset is available.
 
-### Access
+
+### Dataset on portal
+![image](https://user-images.githubusercontent.com/81808810/119352400-ef91d300-bca1-11eb-81a3-4a1eaf3ae9e6.png)
+The portal shows that after the manual registration the dataset is available after manual registration.
+
+### Data access ccess
 #### Hyperdrive access
 ![image](https://user-images.githubusercontent.com/81808810/119352531-16500980-bca2-11eb-9f67-101d43b88b0d.png)
 Example shows hyperdrive script based access. The code either checks the registered datasets for a given key, or pulls the data from an URL to register it with a given name. In case of hyperdrive I am using that from the python scripts.
@@ -143,10 +146,14 @@ The 2 images above show, that AutoML has run 51 iterations, and tbe best AUC sco
 
 ### Results
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
+#### Metrics of the best run observed on the portal
 ![image](https://user-images.githubusercontent.com/81808810/119652785-d49c9b80-be26-11eb-801b-8d3024ed13c1.png)
-
+The chart above shows the precision-recall graph. The final model is fairly strong (0.92 weighted AUC), and this specific chart shows, that the precision score (the proportion of true positive predictions from all positives) starts declining only at high recall rates (recall is the proportion of identified positive cases of all positives). This model serves healthcare and particularly it is predicting on potentially lethal outcomes, so the high recall rate is extremely important, however the high precision is also needed, as that false positives are buden on the healthcare system, and nonetheless it is an additional stress on the patients.
+ 
 #### Explanations
 ![image](https://user-images.githubusercontent.com/81808810/119652882-f39b2d80-be26-11eb-99e4-f169fa528a9d.png)
+We can find explanations of certain runs, including the best run on the portal (if not used from the widget view, details below).
+This particular chart shows the predictor importance, out of which time was the most important and the ejection fraction and serum creatine were the most important. This means, that followup time with the patient had key importance and the proportion of blood leaving the heart is one of the key aspects medical staff needs to focus on as well as the creatine level in the blood.
 
 ![image](https://user-images.githubusercontent.com/81808810/120071014-850bd900-c08d-11eb-850e-ea400181b899.png)
 
@@ -158,7 +165,7 @@ This is used further when we are deploying a model, because we need to pass the 
 
 #### Confusion matrix
 ![image](https://user-images.githubusercontent.com/81808810/120070823-a28c7300-c08c-11eb-96bc-32bfe4f00674.png)
-Can be obtained from the run details, from the backend. Probably more useful if queried programmatically.
+Can be obtained from the run details, from the backend. Probably more useful if queried programmatically or used from the widget view, shown below. Neverteheless the information can be made available for any other visualization or postprocessing tool accessing the storage (PowerBI, R users,...)
 
 #### Progress - Widget
 ![image](https://user-images.githubusercontent.com/81808810/119653166-4c6ac600-be27-11eb-8e51-14127ecc9c87.png)
@@ -169,7 +176,7 @@ One can followup the progress on the RunDetails widget. It helps with progress, 
 ROC-precision curve available on the widget, no need to go to the actual run details on the poral
 
 ![image](https://user-images.githubusercontent.com/81808810/120074679-3dda1400-c09e-11eb-9ccb-4d252ed87f84.png)
-The confusion matrix is available in nice visual format
+The confusion matrix is available in nice visual format in the widget view, without leaving the notebook experience. In case portal based wrangling is disfavored and the storage access directly is disfavored, this is the best option to get immediate information from ML developer side.
 
 ![image](https://user-images.githubusercontent.com/81808810/120074693-51857a80-c09e-11eb-8f52-26846662e1c4.png)
 Feature importance is shown, also these are the results of featurization
