@@ -211,7 +211,12 @@ Transformation graph can be checked directly from the widget
 The screenshot above shows that all metrics can be retrieved, not just the primary one, so recall, F1-score, accuracy, precision and other scores too.
 There is a reference for the confusion matrix and the accuracy table, these can be obtained from the blob storage associated to the ML Workspace
 
-### ONNX model
+#### Features
+![image](https://user-images.githubusercontent.com/81808810/120109539-1f414f00-c16a-11eb-8072-f9ef5820a624.png)
+
+The best model run shows, that only 7 colums were used as numeric, the rest were actually used as categorical in the automatic featurization
+
+#### ONNX model
 ![image](https://user-images.githubusercontent.com/81808810/120070773-6a853000-c08c-11eb-8f22-2329a34b5cd8.png)
 We have the onnx model version generated too in the output folder, on the top of the regular model.pkl file
 
@@ -247,6 +252,13 @@ The portal view and the code call result both show, that the deployment is succe
 ![image](https://user-images.githubusercontent.com/81808810/120106067-dd111100-c15b-11eb-951f-95f4170302a2.png)
 
 Specifying onnx related settings, but keeping the same ACI config, I deployed the ONNX model version, too
+
+#### Experiment final details
+![image](https://user-images.githubusercontent.com/81808810/120109465-e012fe00-c169-11eb-8e19-515f3a7ec929.png)
+
+We can see the model result, AUC, registered models with versions and deployed models with versions on the experiment summary
+
+
 
 ### Model usage details in swagger
 ![image](https://user-images.githubusercontent.com/81808810/120108966-bc4eb880-c167-11eb-9ef1-416485b1bc84.png)
@@ -302,7 +314,15 @@ The picture above shows the parameter space I went through with random parameter
 ![image](https://user-images.githubusercontent.com/81808810/119352067-827e3d80-bca1-11eb-8580-3fe832ac8ca0.png)
 
 ##### Widget view
+The vidget views show the progress as well as the model performance growth after the given runs.
+
 ![image](https://user-images.githubusercontent.com/81808810/119352190-a93c7400-bca1-11eb-8022-167a105efb70.png)
+
+![image](https://user-images.githubusercontent.com/81808810/120109309-26b42880-c169-11eb-91f1-14081ce0d8f1.png)
+
+#### Best metric for Random Forest
+![image](https://user-images.githubusercontent.com/81808810/120109891-b1962280-c16b-11eb-944e-b0e3bd991901.png)
+I have obtained 0.796 AUC with the Random Forest classifier. This is not bad, but not perfect either, especially if we are talking about a model deciding on life saving help. SO I use this result as a baseline.
 
 ### Model02: XGB with random parameter search
 #### Parameter space and sampling
@@ -337,49 +357,40 @@ Here I am controlling:
 * learning_rate: The learning rate of the process
 * I keep gamma on 2, lambda on 5 and scale_pos_weigth on 1, as the classes are balanced
 
-### Best metrics for hyperdrive experiments
-![image](https://user-images.githubusercontent.com/81808810/119352846-7777dd00-bca2-11eb-8a88-32f869c3bd42.png)
+#### Training process
+![image](https://user-images.githubusercontent.com/81808810/120109703-d938bb00-c16a-11eb-8a52-da316002ef6d.png)
 
-and xgb:
-![image](https://user-images.githubusercontent.com/81808810/119645311-31e01f00-be1e-11eb-925b-4d5e8c8f86e5.png)
+The portal view shows how the AUC score of the given runs change.
+
+### Best metrics for hyperdrive experiments
+![image](https://user-images.githubusercontent.com/81808810/120110134-a263a480-c16c-11eb-86b1-6ede81b6ff86.png)
+
+The best xgboost model ended up performing similarly, slightly worse than the RF. This is in gerneral suprising, but auto ML also ended up wit using more random forest alike classifiers in the voting ensamble
 
 ### Registered model at the end of hyperdrive experimentation
-![image](https://user-images.githubusercontent.com/81808810/119354246-24068e80-bca4-11eb-86f5-49aee49ae47e.png)
+![image](https://user-images.githubusercontent.com/81808810/120110218-e22a8c00-c16c-11eb-9023-54836a00c24f.png)
 
-and xgb
-
-![image](https://user-images.githubusercontent.com/81808810/119645724-a0bd7800-be1e-11eb-99f6-a12101b0b78e.png)
-
+I registered the random frest ultimately. This model I have deployed from the portal, manually.
 
 ### Deployed model
-##### The hyperdrive generated one 
-![image](https://user-images.githubusercontent.com/81808810/119354680-a55e2100-bca4-11eb-92bd-09e340f57ef1.png)
-##### The AutoML generated one
-![image](https://user-images.githubusercontent.com/81808810/120070925-26def600-c08d-11eb-8d9d-a4573fa89098.png)
 
 
 
 
-#### Using model
+### Using model
 ![image](https://user-images.githubusercontent.com/81808810/119356896-3afab000-bca7-11eb-8885-4c1318306f0c.png)
 
-#### Logs
+### Logs
 ![image](https://user-images.githubusercontent.com/81808810/119357692-2539ba80-bca8-11eb-9cc8-a27c8ae0100b.png)
 
 
-### Results
-*TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
-
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
-
-## Model Deployment
-*TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
 
 
 ## Deleting compute 
 ![image](https://user-images.githubusercontent.com/81808810/119647826-04e13b80-be21-11eb-87e5-bef8a916b538.png)
 
 ## SUMMARY
+The project has proven that in a timecruch scenario AutoML proved really useful, to find the best model. In fact the AutoML best model was a true surprise, because I was expecting mode xgboost related models in the voting ensemble. This shows, that random forest, which was my offline original choice can be used well. The AutoML has also shown, that featurization need to be done more carefully compared to my bacis usage.
 
 ## Screen Recording
 *TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
@@ -390,10 +401,16 @@ and xgb
 ### Auto ML Screecast
 https://youtu.be/a1B01lm_AO4
 
+### Hyperdrive screencast
+
 
 ## Standout Suggestions
-### ONNX model
-I saved my model in an ONNX version. This is a 
+### Delivered: ONNX model
+I saved my model in an ONNX version. This is a opern neural network exchange format, that allows interchange between various ML frameworks and tools. ONNX models can be easily integrated to Windos apps and devices
+
+### Potential upgrade of the model
+The model was generated on  small data sample. It would be very interesting, to backtest the model in true batch inference case. This for sure cannot be done in the scope of the project, however that gives the ML models a real usage context - and value.
+
 
 ## Final notes
 ![image](https://user-images.githubusercontent.com/81808810/120106185-6c1e2900-c15c-11eb-9838-1e80d59ec588.png)
