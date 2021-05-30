@@ -218,7 +218,7 @@ We have the onnx model version generated too in the output folder, on the top of
 #### Saving ONNX model
 ![image](https://user-images.githubusercontent.com/81808810/120071523-1bd99500-c090-11eb-811c-d55475fd2645.png)
 
-
+I am simply saving the model in the project directory. Later on this could be moved and deployed to any other environment.
 #### Registering PKL and ONNX models both
 ![image](https://user-images.githubusercontent.com/81808810/120105542-9fab8400-c159-11eb-83e5-e3ca9f485ce8.png)
 
@@ -238,14 +238,25 @@ Uploaded them to the project repo.
 
 Using the scoring file and the environment that I retreived in the steps above, I created a ACI config, where I specified the allocated CPU, memory, whether I want to enable authentication and whether I want to enable app insight.
 
+#### Deployment status check on portal
+![image](https://user-images.githubusercontent.com/81808810/120107551-b5bd4280-c161-11eb-93b8-1a251ed4b933.png)
+
+The portal view and the code call result both show, that the deployment is successful.
+
 #### Deploying ONNX model with inference xonfig
 ![image](https://user-images.githubusercontent.com/81808810/120106067-dd111100-c15b-11eb-951f-95f4170302a2.png)
 
 Specifying onnx related settings, but keeping the same ACI config, I deployed the ONNX model version, too
 
 ### Using Auto ML Model
+![image](https://user-images.githubusercontent.com/81808810/120107603-f4eb9380-c161-11eb-82ba-b2d0bd9a9223.png)
+
+The code based call provides the prediction for us, no errors shown.
 
 ### Logs
+![image](https://user-images.githubusercontent.com/81808810/120107640-1ea4ba80-c162-11eb-8ac8-897d18644029.png)
+
+Logs show healthy enpoint request-response communication, no error was thrown during the prediction.
 
 
 
@@ -261,10 +272,21 @@ I was experimenting on 3 layers:
 * Within the scope of tha project I was focusing on exploration of the techniques, so after this 3 layered approach iI gave up optimizing and opted for the best AutoML model as an end result
 
 ![image](https://user-images.githubusercontent.com/81808810/119644203-e8430480-be1c-11eb-9950-7d348d5c316d.png)
+
 The screenshot above shows the multiple runs of hyperdrive experimentations.
 The sections below contain the datails.
 
 ### Model01: The Random Forest
+The first modeling excercise was running a random forrest classifier with different parameters.
+The parameters I was trying to control were:
+* n_estimators: The number of trees used in the random forest
+* max_depth: the maximum depth of the trees
+* min_samples_split: the minimum number of samples to continue splitting
+
+#### Parameter space
+![image](https://user-images.githubusercontent.com/81808810/120106889-1434f180-c15f-11eb-87e3-83104c1c5995.png)
+
+The picture above shows the parameter space I went through with random parameter sampling 
 
 #### Training progress
 ##### Portal view
@@ -274,13 +296,33 @@ The sections below contain the datails.
 ![image](https://user-images.githubusercontent.com/81808810/119352190-a93c7400-bca1-11eb-8022-167a105efb70.png)
 
 ### Model02: XGB with random parameter search
+#### Parameter space and sampling
+![image](https://user-images.githubusercontent.com/81808810/120106934-434b6300-c15f-11eb-8e4a-1dc8e1cff36c.png)
+
+For XGBoost I used the following parameters duing the tuning
+* num:boost_round: the number of boosting rounds to optimize the weak estimator
+* max_depth: I am using tree based learners, and this parameter controls the maximum depth. Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. Default is 6.
+* learning_rate: Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
+* gamma: Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be
+* reg_lambda: L2 regularization term on weights. Increasing this value will make model more conservative.
+* scale_pos_weight: Control the balance of positive and negative weights, useful for unbalanced classes
+
 #### Portal view
 ![image](https://user-images.githubusercontent.com/81808810/119645118-f9404580-be1d-11eb-9ad6-6f98b5d25bf2.png)
 
 #### Widget view
 ![image](https://user-images.githubusercontent.com/81808810/119645070-e88fcf80-be1d-11eb-8aec-13b93e652475.png)
 
+### Model03: XGBoost with bayesian parameter search
+#### Paramter space
+![image](https://user-images.githubusercontent.com/81808810/120107510-91616600-c161-11eb-989e-0bb7b6ee31b1.png)
 
+For the second xgboost run I was trying to rule out those parameters, that were not really deciding factors in the previous runs, and used those parameters, that seemed to make difference. I also used different parameter sampling, as I wanted more exhaustive search in the smaller space.
+Here I am controlling:
+* num:boost_round: the number of boosting rounds to optimize the weak estimator
+* max_depth: I am using tree based learners, and this parameter controls the maximum depth
+* learning_rate: The learning rate of the process
+* I keep gamma on 2, lambda on 5 and scale_pos_weigth on 1, as the classes are balanced
 
 #### Best metrics
 ![image](https://user-images.githubusercontent.com/81808810/119352846-7777dd00-bca2-11eb-8a88-32f869c3bd42.png)
@@ -324,6 +366,7 @@ and xgb
 ## Deleting compute 
 ![image](https://user-images.githubusercontent.com/81808810/119647826-04e13b80-be21-11eb-87e5-bef8a916b538.png)
 
+## SUMMARY
 
 ## Screen Recording
 *TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
@@ -331,8 +374,13 @@ and xgb
 - Demo of the deployed  model
 - Demo of a sample request sent to the endpoint and its response
 
+### Auto ML Screecast
+https://youtu.be/a1B01lm_AO4
+
+
 ## Standout Suggestions
-*TODO (Optional):* This is where you can provide information about any standout suggestions that you have attempted.
+### ONNX model
+I saved my model in an ONNX version. This is a 
 
 ## Final notes
 ![image](https://user-images.githubusercontent.com/81808810/120106185-6c1e2900-c15c-11eb-9838-1e80d59ec588.png)
