@@ -373,21 +373,28 @@ The best xgboost model ended up performing similarly, slightly worse than the RF
 I registered the random frest ultimately. This model I have deployed from the portal, manually.
 
 ### Deployed model
+![image](https://user-images.githubusercontent.com/81808810/120111133-00928680-c171-11eb-8f48-bfcdfdc7b199.png)
 
+This model I deployed manually, but the application insights I have enabled from code. The endpoint is in a healthy state and the test below was also successful.
 
 
 
 ### Using model
-![image](https://user-images.githubusercontent.com/81808810/119356896-3afab000-bca7-11eb-8885-4c1318306f0c.png)
+![image](https://user-images.githubusercontent.com/81808810/120111072-b6a9a080-c170-11eb-86ae-d83141b0d8b9.png)
+The usage of the model is slightly different, here the returned values are probabilities. For the same input we see the probability of a negative case and the positive, so overall the prediction made for the same test is the sam in this case as automl endpoint model
 
 ### Logs
-![image](https://user-images.githubusercontent.com/81808810/119357692-2539ba80-bca8-11eb-9cc8-a27c8ae0100b.png)
+![image](https://user-images.githubusercontent.com/81808810/120111059-a691c100-c170-11eb-87f1-873d9bf87674.png)
+
+T
 
 
 
 
 ## Deleting compute 
-![image](https://user-images.githubusercontent.com/81808810/119647826-04e13b80-be21-11eb-87e5-bef8a916b538.png)
+![image](https://user-images.githubusercontent.com/81808810/120110929-fd4acb00-c16f-11eb-910c-2f4af13a6d76.png)
+
+Compute has been deleted from notebook.
 
 ## SUMMARY
 The project has proven that in a timecruch scenario AutoML proved really useful, to find the best model. In fact the AutoML best model was a true surprise, because I was expecting mode xgboost related models in the voting ensemble. This shows, that random forest, which was my offline original choice can be used well. The AutoML has also shown, that featurization need to be done more carefully compared to my bacis usage.
@@ -401,8 +408,12 @@ The project has proven that in a timecruch scenario AutoML proved really useful,
 ### Auto ML Screecast
 https://youtu.be/a1B01lm_AO4
 
-### Hyperdrive screencast
+### Hyperdrive screencast01
+https://youtu.be/7ev5_N2jOWY
 
+### Hyperdrive screencast02 and compute delete
+Making sure, that model response is captured, and the deleting of the compute cluster
+https://youtu.be/SOridasbanE
 
 ## Standout Suggestions
 ### Delivered: ONNX model
