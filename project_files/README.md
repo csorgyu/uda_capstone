@@ -212,24 +212,29 @@ We have the onnx model version generated too in the output folder, on the top of
 #### Saving ONNX model
 ![image](https://user-images.githubusercontent.com/81808810/120071523-1bd99500-c090-11eb-811c-d55475fd2645.png)
 
-#### Inference config
-![image](https://user-images.githubusercontent.com/81808810/120072224-02861800-c093-11eb-9826-ac3ab7e5e918.png)
-
-
-![image](https://user-images.githubusercontent.com/81808810/120072216-f732ec80-c092-11eb-9f98-ccad7619e6df.png)
-
-![image](https://user-images.githubusercontent.com/81808810/120072374-ed5db900-c093-11eb-8ce1-b5f1bf77b0bf.png)
-
-![image](https://user-images.githubusercontent.com/81808810/120074981-b5f50980-c09f-11eb-9ebf-2e93033beb75.png)
-Latest and greatest
 
 #### Registering PKL and ONNX models both
-![image](https://user-images.githubusercontent.com/81808810/120074921-6f071400-c09f-11eb-939d-e0054fa33cec.png)
+![image](https://user-images.githubusercontent.com/81808810/120105542-9fab8400-c159-11eb-83e5-e3ca9f485ce8.png)
+I created an ONNX model registration in the model repo and a pkl version as well. The conda environment was retreived from the run itself, to make all configs and settings reproducible.
 
-![image](https://user-images.githubusercontent.com/81808810/120074930-7d553000-c09f-11eb-9f51-bc3846edf3dc.png)
+#### Inference config
+![image](https://user-images.githubusercontent.com/81808810/120072224-02861800-c093-11eb-9826-ac3ab7e5e918.png)
+I collected the scoring files from the model output.
 
-#### Deploying PKL model
-![image](https://user-images.githubusercontent.com/81808810/120075031-f3599700-c09f-11eb-819b-cc3669501d85.png)
+![image](https://user-images.githubusercontent.com/81808810/120105501-77238a00-c159-11eb-988f-d564169a94e9.png)
+Uploaded them to the project repo.
+
+#### Deploying PKL model with inference config
+![image](https://user-images.githubusercontent.com/81808810/120105581-d08bb900-c159-11eb-9143-d8926b72f998.png)
+Using the scoring file and the environment that I retreived in the steps above, I created a ACI config, where I specified the allocated CPU, memory, whether I want to enable authentication and whether I want to enable app insight.
+
+#### Deploying ONNX model with inference xonfig
+![image](https://user-images.githubusercontent.com/81808810/120105714-6fb0b080-c15a-11eb-8038-38cf4db7445b.png)
+Specifying onnx related settings, but keeping the same ACI config, I deployed the ONNX model version, too
+
+
+
+
 
 
 ## Hyperparameter Tuning
