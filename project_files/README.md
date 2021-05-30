@@ -248,10 +248,19 @@ The portal view and the code call result both show, that the deployment is succe
 
 Specifying onnx related settings, but keeping the same ACI config, I deployed the ONNX model version, too
 
+### Model usage details in swagger
+![image](https://user-images.githubusercontent.com/81808810/120108966-bc4eb880-c167-11eb-9ef1-416485b1bc84.png)
+
+If we download swagger.json file from the deployed model and set up a local container for swagger and a HTTP client, we can see an example POST request payload, what we can sent to the model.
+
+![image](https://user-images.githubusercontent.com/81808810/120109023-fa4bdc80-c167-11eb-8e26-bb840612843f.png)
+
+We can expect a single prediction number as a response. 
+
 ### Using Auto ML Model
 ![image](https://user-images.githubusercontent.com/81808810/120107603-f4eb9380-c161-11eb-82ba-b2d0bd9a9223.png)
 
-The code based call provides the prediction for us, no errors shown.
+The code based call provides the prediction for us, no errors shown. I tested with multiple payloads, both 0 and 1 predictions have been returned.
 
 ### Logs
 ![image](https://user-images.githubusercontent.com/81808810/120107640-1ea4ba80-c162-11eb-8ac8-897d18644029.png)
@@ -310,8 +319,12 @@ For XGBoost I used the following parameters duing the tuning
 #### Portal view
 ![image](https://user-images.githubusercontent.com/81808810/119645118-f9404580-be1d-11eb-9ad6-6f98b5d25bf2.png)
 
+One can opt for following up the progress on the portal. This chart shows the progress of the random forest classifier training, given the actual input values for the parameters.
+
 #### Widget view
 ![image](https://user-images.githubusercontent.com/81808810/119645070-e88fcf80-be1d-11eb-8aec-13b93e652475.png)
+
+The widget shows progress in the development space in real time.
 
 ### Model03: XGBoost with bayesian parameter search
 #### Paramter space
@@ -324,13 +337,13 @@ Here I am controlling:
 * learning_rate: The learning rate of the process
 * I keep gamma on 2, lambda on 5 and scale_pos_weigth on 1, as the classes are balanced
 
-#### Best metrics
+### Best metrics for hyperdrive experiments
 ![image](https://user-images.githubusercontent.com/81808810/119352846-7777dd00-bca2-11eb-8a88-32f869c3bd42.png)
 
 and xgb:
 ![image](https://user-images.githubusercontent.com/81808810/119645311-31e01f00-be1e-11eb-925b-4d5e8c8f86e5.png)
 
-#### Registered model
+### Registered model at the end of hyperdrive experimentation
 ![image](https://user-images.githubusercontent.com/81808810/119354246-24068e80-bca4-11eb-86f5-49aee49ae47e.png)
 
 and xgb
@@ -338,7 +351,7 @@ and xgb
 ![image](https://user-images.githubusercontent.com/81808810/119645724-a0bd7800-be1e-11eb-99f6-a12101b0b78e.png)
 
 
-#### Deployed model
+### Deployed model
 ##### The hyperdrive generated one 
 ![image](https://user-images.githubusercontent.com/81808810/119354680-a55e2100-bca4-11eb-92bd-09e340f57ef1.png)
 ##### The AutoML generated one
