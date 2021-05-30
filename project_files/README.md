@@ -182,26 +182,32 @@ Can be obtained from the run details, from the backend. Probably more useful if 
 
 #### Progress - Widget
 ![image](https://user-images.githubusercontent.com/81808810/119653166-4c6ac600-be27-11eb-8e51-14127ecc9c87.png)
+
 One can followup the progress on the RunDetails widget. It helps with progress, whather certain runs have failed or not, the current iterations metric, theformer best metric, the duration, start and end time. It also shows the pipeline, that was created automatically. After finalizing it shows the best metrics scores (in my case AUC_weighted) on a diagram.
 
 #### Results: Charts
 ![image](https://user-images.githubusercontent.com/81808810/120074651-17b47400-c09e-11eb-9187-458a54d74f6e.png)
+
 ROC-precision curve available on the widget, no need to go to the actual run details on the poral
 
 ![image](https://user-images.githubusercontent.com/81808810/120074679-3dda1400-c09e-11eb-9ccb-4d252ed87f84.png)
+
 The confusion matrix is available in nice visual format in the widget view, without leaving the notebook experience. In case portal based wrangling is disfavored and the storage access directly is disfavored, this is the best option to get immediate information from ML developer side.
 
 ![image](https://user-images.githubusercontent.com/81808810/120074693-51857a80-c09e-11eb-8f52-26846662e1c4.png)
+
 Feature importance is shown, also these are the results of featurization
 
 
 
 #### Results: Transformations - Widget
 ![image](https://user-images.githubusercontent.com/81808810/120074605-eb005c80-c09d-11eb-8b6d-5aa8e1f9b14e.png)
+
 Transformation graph can be checked directly from the widget
 
 #### Metrics
 ![image](https://user-images.githubusercontent.com/81808810/119653970-3c071b00-be28-11eb-98da-242b71847de5.png)
+
 The screenshot above shows that all metrics can be retrieved, not just the primary one, so recall, F1-score, accuracy, precision and other scores too.
 There is a reference for the confusion matrix and the accuracy table, these can be obtained from the blob storage associated to the ML Workspace
 
@@ -215,24 +221,31 @@ We have the onnx model version generated too in the output folder, on the top of
 
 #### Registering PKL and ONNX models both
 ![image](https://user-images.githubusercontent.com/81808810/120105542-9fab8400-c159-11eb-83e5-e3ca9f485ce8.png)
+
 I created an ONNX model registration in the model repo and a pkl version as well. The conda environment was retreived from the run itself, to make all configs and settings reproducible.
 
 #### Inference config
 ![image](https://user-images.githubusercontent.com/81808810/120072224-02861800-c093-11eb-9826-ac3ab7e5e918.png)
+
 I collected the scoring files from the model output.
 
 ![image](https://user-images.githubusercontent.com/81808810/120105501-77238a00-c159-11eb-988f-d564169a94e9.png)
+
 Uploaded them to the project repo.
 
 #### Deploying PKL model with inference config
 ![image](https://user-images.githubusercontent.com/81808810/120105581-d08bb900-c159-11eb-9143-d8926b72f998.png)
+
 Using the scoring file and the environment that I retreived in the steps above, I created a ACI config, where I specified the allocated CPU, memory, whether I want to enable authentication and whether I want to enable app insight.
 
 #### Deploying ONNX model with inference xonfig
-![image](https://user-images.githubusercontent.com/81808810/120105714-6fb0b080-c15a-11eb-8038-38cf4db7445b.png)
+![image](https://user-images.githubusercontent.com/81808810/120106067-dd111100-c15b-11eb-951f-95f4170302a2.png)
+
 Specifying onnx related settings, but keeping the same ACI config, I deployed the ONNX model version, too
 
+### Using Auto ML Model
 
+### Logs
 
 
 
@@ -308,7 +321,7 @@ and xgb
 *TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
 
 
-## Deleting compute for Hyperdrive
+## Deleting compute 
 ![image](https://user-images.githubusercontent.com/81808810/119647826-04e13b80-be21-11eb-87e5-bef8a916b538.png)
 
 
@@ -320,3 +333,8 @@ and xgb
 
 ## Standout Suggestions
 *TODO (Optional):* This is where you can provide information about any standout suggestions that you have attempted.
+
+## Final notes
+![image](https://user-images.githubusercontent.com/81808810/120106185-6c1e2900-c15c-11eb-9838-1e80d59ec588.png)
+
+Netwok errors were continuously present in the lab environment in this lab, that made the notebook view very challenging to use.
