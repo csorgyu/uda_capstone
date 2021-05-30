@@ -3,9 +3,10 @@
 The goal of the project is creating a classification model with the 2 primary toolkits Azure ML Workspace offers for a selected dataset.
 For my own work I chose the [Heart failure clinical data|https://www.kaggle.com/andrewmvd/heart-failure-clinical-data].
 
-There are 2 major modeling tasks and with deployment tasks included to be delivered
-- [ ] Delivering a model with the Auto ML functionality
-- [x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML 
+There are 2 major modeling tasks and with deployment tasks included to be delivered and one elective
+- [x] Delivering a model with the Auto ML functionality (2 deployment formats, pkl and onnx based model)
+- [x] Delivering a model created as my own work and optimized with the hyperdrive feature of Azure ML (3 hyperdrive runs, 2 models, 2 different parameter space sampling on the second)
+- [x] Saving the model in ONNX format 
 
 The best model needs to be deployed and tested for consumption in both of the cases.
 
@@ -39,11 +40,15 @@ To reproduce my work, the dataset from the ../data folder needs to be registered
 root
 - *hyperparameter_tuning.ipynb*
 - *automl.ipynb*
+- *scoring_file_v_2_0_0.py*
+- *scoring_file_v_2_0_0_onnx.py*
 - **SCRIPT**
   - *hyper_tuning_rf.py*
   - *hyper_tuning_xgb.py*
 
 I registered the dataset manually as a tabular dataset, I used the default storage as a datastore. Other datastores can be registered of various types.
+
+The *scoring_file_v_2_0_0.py* and the *scoring_file_v_2_0_0_onnx.py* were collected from the model outputs of the best automl model, and I editet the *_onnx* postfixed one to refer to the .onnx model output.
 
 I was using a 4 node compute cluster for both Auto ML and Hyperdrive based training and ACI based service deployment.
 
@@ -82,11 +87,15 @@ The age distribution shows, that the patients, who died were slightly older on a
 **Distribution of the CPK enzyme levels example**
 The distribution of the CPK enzyme is really skewed in both of the cases, mean, Q3 quartile are very similar. The patients who survived show slightly more outliers, but the skewness of the CPK enzyme levels for those who died, is bigger.
 
-#### Datasets on portal
-![image](https://user-images.githubusercontent.com/81808810/119352400-ef91d300-bca1-11eb-81a3-4a1eaf3ae9e6.png)
-The portal shows that after the manual registration the dataset is available.
 
-### Access
+
+### Dataset on portal
+![image](https://user-images.githubusercontent.com/81808810/119352400-ef91d300-bca1-11eb-81a3-4a1eaf3ae9e6.png)
+The portal shows that after the manual registration the dataset is available after manual registration.
+
+### Data access ccess
+I am using a programmatic data access from the notebook side. I was facing network slowness and problems through my modeling, so I decided not to waste time with programmatic registration at each an every lab attempt, just register the downloaded dataset manually.
+
 #### Hyperdrive access
 ![image](https://user-images.githubusercontent.com/81808810/119352531-16500980-bca2-11eb-9f67-101d43b88b0d.png)
 Example shows hyperdrive script based access. The code either checks the registered datasets for a given key, or pulls the data from an URL to register it with a given name. In case of hyperdrive I am using that from the python scripts.
@@ -143,10 +152,21 @@ The 2 images above show, that AutoML has run 51 iterations, and tbe best AUC sco
 
 ### Results
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
-![image](https://user-images.githubusercontent.com/81808810/119652785-d49c9b80-be26-11eb-801b-8d3024ed13c1.png)
+#### Model details
+![image](https://user-images.githubusercontent.com/81808810/120104816-a389d700-c156-11eb-99fd-2356d7c0acd0.png)
+The image above shows the Raw JSON details of the best model, which was a votin ensemble. The algorythm has chosen the AutoML's former runs, to build a voting model, with biggest weight on the 7th, a RandomForest model and additional tree based models, but also a gradient boositng and XGBoost models
 
+![image](https://user-images.githubusercontent.com/81808810/120104946-31fe5880-c157-11eb-8d7f-98f939927920.png)
+Interestingly enough some members of the voting ensemble have not reached extremely high AUC score, however what I am assuming here, that the robustness of the random forest algorythm compensates the recall power of xgboost and votes as a regularization, which is important if we observe such a small dataset
+
+#### Metrics of the best run observed on the portal
+![image](https://user-images.githubusercontent.com/81808810/119652785-d49c9b80-be26-11eb-801b-8d3024ed13c1.png)
+The chart above shows the precision-recall graph. The final model is fairly strong (0.92 weighted AUC), and this specific chart shows, that the precision score (the proportion of true positive predictions from all positives) starts declining only at high recall rates (recall is the proportion of identified positive cases of all positives). This model serves healthcare and particularly it is predicting on potentially lethal outcomes, so the high recall rate is extremely important, however the high precision is also needed, as that false positives are buden on the healthcare system, and nonetheless it is an additional stress on the patients.
+ 
 #### Explanations
 ![image](https://user-images.githubusercontent.com/81808810/119652882-f39b2d80-be26-11eb-99e4-f169fa528a9d.png)
+We can find explanations of certain runs, including the best run on the portal (if not used from the widget view, details below).
+This particular chart shows the predictor importance, out of which time was the most important and the ejection fraction and serum creatine were the most important. This means, that followup time with the patient had key importance and the proportion of blood leaving the heart is one of the key aspects medical staff needs to focus on as well as the creatine level in the blood.
 
 ![image](https://user-images.githubusercontent.com/81808810/120071014-850bd900-c08d-11eb-850e-ea400181b899.png)
 
@@ -158,30 +178,36 @@ This is used further when we are deploying a model, because we need to pass the 
 
 #### Confusion matrix
 ![image](https://user-images.githubusercontent.com/81808810/120070823-a28c7300-c08c-11eb-96bc-32bfe4f00674.png)
-Can be obtained from the run details, from the backend. Probably more useful if queried programmatically.
+Can be obtained from the run details, from the backend. Probably more useful if queried programmatically or used from the widget view, shown below. Neverteheless the information can be made available for any other visualization or postprocessing tool accessing the storage (PowerBI, R users,...)
 
 #### Progress - Widget
 ![image](https://user-images.githubusercontent.com/81808810/119653166-4c6ac600-be27-11eb-8e51-14127ecc9c87.png)
+
 One can followup the progress on the RunDetails widget. It helps with progress, whather certain runs have failed or not, the current iterations metric, theformer best metric, the duration, start and end time. It also shows the pipeline, that was created automatically. After finalizing it shows the best metrics scores (in my case AUC_weighted) on a diagram.
 
 #### Results: Charts
 ![image](https://user-images.githubusercontent.com/81808810/120074651-17b47400-c09e-11eb-9187-458a54d74f6e.png)
+
 ROC-precision curve available on the widget, no need to go to the actual run details on the poral
 
 ![image](https://user-images.githubusercontent.com/81808810/120074679-3dda1400-c09e-11eb-9ccb-4d252ed87f84.png)
-The confusion matrix is available in nice visual format
+
+The confusion matrix is available in nice visual format in the widget view, without leaving the notebook experience. In case portal based wrangling is disfavored and the storage access directly is disfavored, this is the best option to get immediate information from ML developer side.
 
 ![image](https://user-images.githubusercontent.com/81808810/120074693-51857a80-c09e-11eb-8f52-26846662e1c4.png)
+
 Feature importance is shown, also these are the results of featurization
 
 
 
 #### Results: Transformations - Widget
 ![image](https://user-images.githubusercontent.com/81808810/120074605-eb005c80-c09d-11eb-8b6d-5aa8e1f9b14e.png)
+
 Transformation graph can be checked directly from the widget
 
 #### Metrics
 ![image](https://user-images.githubusercontent.com/81808810/119653970-3c071b00-be28-11eb-98da-242b71847de5.png)
+
 The screenshot above shows that all metrics can be retrieved, not just the primary one, so recall, F1-score, accuracy, precision and other scores too.
 There is a reference for the confusion matrix and the accuracy table, these can be obtained from the blob storage associated to the ML Workspace
 
@@ -192,24 +218,56 @@ We have the onnx model version generated too in the output folder, on the top of
 #### Saving ONNX model
 ![image](https://user-images.githubusercontent.com/81808810/120071523-1bd99500-c090-11eb-811c-d55475fd2645.png)
 
+I am simply saving the model in the project directory. Later on this could be moved and deployed to any other environment.
+#### Registering PKL and ONNX models both
+![image](https://user-images.githubusercontent.com/81808810/120105542-9fab8400-c159-11eb-83e5-e3ca9f485ce8.png)
+
+I created an ONNX model registration in the model repo and a pkl version as well. The conda environment was retreived from the run itself, to make all configs and settings reproducible.
+
 #### Inference config
 ![image](https://user-images.githubusercontent.com/81808810/120072224-02861800-c093-11eb-9826-ac3ab7e5e918.png)
 
+I collected the scoring files from the model output.
 
-![image](https://user-images.githubusercontent.com/81808810/120072216-f732ec80-c092-11eb-9f98-ccad7619e6df.png)
+![image](https://user-images.githubusercontent.com/81808810/120105501-77238a00-c159-11eb-988f-d564169a94e9.png)
 
-![image](https://user-images.githubusercontent.com/81808810/120072374-ed5db900-c093-11eb-8ce1-b5f1bf77b0bf.png)
+Uploaded them to the project repo.
 
-![image](https://user-images.githubusercontent.com/81808810/120074981-b5f50980-c09f-11eb-9ebf-2e93033beb75.png)
-Latest and greatest
+#### Deploying PKL model with inference config
+![image](https://user-images.githubusercontent.com/81808810/120105581-d08bb900-c159-11eb-9143-d8926b72f998.png)
 
-#### Registering PKL and ONNX models both
-![image](https://user-images.githubusercontent.com/81808810/120074921-6f071400-c09f-11eb-939d-e0054fa33cec.png)
+Using the scoring file and the environment that I retreived in the steps above, I created a ACI config, where I specified the allocated CPU, memory, whether I want to enable authentication and whether I want to enable app insight.
 
-![image](https://user-images.githubusercontent.com/81808810/120074930-7d553000-c09f-11eb-9f51-bc3846edf3dc.png)
+#### Deployment status check on portal
+![image](https://user-images.githubusercontent.com/81808810/120107551-b5bd4280-c161-11eb-93b8-1a251ed4b933.png)
 
-#### Deploying PKL model
-![image](https://user-images.githubusercontent.com/81808810/120075031-f3599700-c09f-11eb-819b-cc3669501d85.png)
+The portal view and the code call result both show, that the deployment is successful.
+
+#### Deploying ONNX model with inference xonfig
+![image](https://user-images.githubusercontent.com/81808810/120106067-dd111100-c15b-11eb-951f-95f4170302a2.png)
+
+Specifying onnx related settings, but keeping the same ACI config, I deployed the ONNX model version, too
+
+### Model usage details in swagger
+![image](https://user-images.githubusercontent.com/81808810/120108966-bc4eb880-c167-11eb-9ef1-416485b1bc84.png)
+
+If we download swagger.json file from the deployed model and set up a local container for swagger and a HTTP client, we can see an example POST request payload, what we can sent to the model.
+
+![image](https://user-images.githubusercontent.com/81808810/120109023-fa4bdc80-c167-11eb-8e26-bb840612843f.png)
+
+We can expect a single prediction number as a response. 
+
+### Using Auto ML Model
+![image](https://user-images.githubusercontent.com/81808810/120107603-f4eb9380-c161-11eb-82ba-b2d0bd9a9223.png)
+
+The code based call provides the prediction for us, no errors shown. I tested with multiple payloads, both 0 and 1 predictions have been returned.
+
+### Logs
+![image](https://user-images.githubusercontent.com/81808810/120107640-1ea4ba80-c162-11eb-8ac8-897d18644029.png)
+
+Logs show healthy enpoint request-response communication, no error was thrown during the prediction.
+
+
 
 
 ## Hyperparameter Tuning
@@ -223,10 +281,21 @@ I was experimenting on 3 layers:
 * Within the scope of tha project I was focusing on exploration of the techniques, so after this 3 layered approach iI gave up optimizing and opted for the best AutoML model as an end result
 
 ![image](https://user-images.githubusercontent.com/81808810/119644203-e8430480-be1c-11eb-9950-7d348d5c316d.png)
+
 The screenshot above shows the multiple runs of hyperdrive experimentations.
 The sections below contain the datails.
 
 ### Model01: The Random Forest
+The first modeling excercise was running a random forrest classifier with different parameters.
+The parameters I was trying to control were:
+* n_estimators: The number of trees used in the random forest
+* max_depth: the maximum depth of the trees
+* min_samples_split: the minimum number of samples to continue splitting
+
+#### Parameter space
+![image](https://user-images.githubusercontent.com/81808810/120106889-1434f180-c15f-11eb-87e3-83104c1c5995.png)
+
+The picture above shows the parameter space I went through with random parameter sampling 
 
 #### Training progress
 ##### Portal view
@@ -236,21 +305,45 @@ The sections below contain the datails.
 ![image](https://user-images.githubusercontent.com/81808810/119352190-a93c7400-bca1-11eb-8022-167a105efb70.png)
 
 ### Model02: XGB with random parameter search
+#### Parameter space and sampling
+![image](https://user-images.githubusercontent.com/81808810/120106934-434b6300-c15f-11eb-8e4a-1dc8e1cff36c.png)
+
+For XGBoost I used the following parameters duing the tuning
+* num:boost_round: the number of boosting rounds to optimize the weak estimator
+* max_depth: I am using tree based learners, and this parameter controls the maximum depth. Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. Default is 6.
+* learning_rate: Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
+* gamma: Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be
+* reg_lambda: L2 regularization term on weights. Increasing this value will make model more conservative.
+* scale_pos_weight: Control the balance of positive and negative weights, useful for unbalanced classes
+
 #### Portal view
 ![image](https://user-images.githubusercontent.com/81808810/119645118-f9404580-be1d-11eb-9ad6-6f98b5d25bf2.png)
+
+One can opt for following up the progress on the portal. This chart shows the progress of the random forest classifier training, given the actual input values for the parameters.
 
 #### Widget view
 ![image](https://user-images.githubusercontent.com/81808810/119645070-e88fcf80-be1d-11eb-8aec-13b93e652475.png)
 
+The widget shows progress in the development space in real time.
 
+### Model03: XGBoost with bayesian parameter search
+#### Paramter space
+![image](https://user-images.githubusercontent.com/81808810/120107510-91616600-c161-11eb-989e-0bb7b6ee31b1.png)
 
-#### Best metrics
+For the second xgboost run I was trying to rule out those parameters, that were not really deciding factors in the previous runs, and used those parameters, that seemed to make difference. I also used different parameter sampling, as I wanted more exhaustive search in the smaller space.
+Here I am controlling:
+* num:boost_round: the number of boosting rounds to optimize the weak estimator
+* max_depth: I am using tree based learners, and this parameter controls the maximum depth
+* learning_rate: The learning rate of the process
+* I keep gamma on 2, lambda on 5 and scale_pos_weigth on 1, as the classes are balanced
+
+### Best metrics for hyperdrive experiments
 ![image](https://user-images.githubusercontent.com/81808810/119352846-7777dd00-bca2-11eb-8a88-32f869c3bd42.png)
 
 and xgb:
 ![image](https://user-images.githubusercontent.com/81808810/119645311-31e01f00-be1e-11eb-925b-4d5e8c8f86e5.png)
 
-#### Registered model
+### Registered model at the end of hyperdrive experimentation
 ![image](https://user-images.githubusercontent.com/81808810/119354246-24068e80-bca4-11eb-86f5-49aee49ae47e.png)
 
 and xgb
@@ -258,7 +351,7 @@ and xgb
 ![image](https://user-images.githubusercontent.com/81808810/119645724-a0bd7800-be1e-11eb-99f6-a12101b0b78e.png)
 
 
-#### Deployed model
+### Deployed model
 ##### The hyperdrive generated one 
 ![image](https://user-images.githubusercontent.com/81808810/119354680-a55e2100-bca4-11eb-92bd-09e340f57ef1.png)
 ##### The AutoML generated one
@@ -283,9 +376,10 @@ and xgb
 *TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
 
 
-## Deleting compute for Hyperdrive
+## Deleting compute 
 ![image](https://user-images.githubusercontent.com/81808810/119647826-04e13b80-be21-11eb-87e5-bef8a916b538.png)
 
+## SUMMARY
 
 ## Screen Recording
 *TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
@@ -293,5 +387,15 @@ and xgb
 - Demo of the deployed  model
 - Demo of a sample request sent to the endpoint and its response
 
+### Auto ML Screecast
+https://youtu.be/a1B01lm_AO4
+
+
 ## Standout Suggestions
-*TODO (Optional):* This is where you can provide information about any standout suggestions that you have attempted.
+### ONNX model
+I saved my model in an ONNX version. This is a 
+
+## Final notes
+![image](https://user-images.githubusercontent.com/81808810/120106185-6c1e2900-c15c-11eb-9838-1e80d59ec588.png)
+
+Netwok errors were continuously present in the lab environment in this lab, that made the notebook view very challenging to use.
