@@ -146,6 +146,13 @@ The 2 images above show, that AutoML has run 51 iterations, and tbe best AUC sco
 
 ### Results
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
+#### Model details
+![image](https://user-images.githubusercontent.com/81808810/120104816-a389d700-c156-11eb-99fd-2356d7c0acd0.png)
+The image above shows the Raw JSON details of the best model, which was a votin ensemble. The algorythm has chosen the AutoML's former runs, to build a voting model, with biggest weight on the 7th, a RandomForest model and additional tree based models, but also a gradient boositng and XGBoost models
+
+![image](https://user-images.githubusercontent.com/81808810/120104946-31fe5880-c157-11eb-8d7f-98f939927920.png)
+Interestingly enough some members of the voting ensemble have not reached extremely high AUC score, however what I am assuming here, that the robustness of the random forest algorythm compensates the recall power of xgboost and votes as a regularization, which is important if we observe such a small dataset
+
 #### Metrics of the best run observed on the portal
 ![image](https://user-images.githubusercontent.com/81808810/119652785-d49c9b80-be26-11eb-801b-8d3024ed13c1.png)
 The chart above shows the precision-recall graph. The final model is fairly strong (0.92 weighted AUC), and this specific chart shows, that the precision score (the proportion of true positive predictions from all positives) starts declining only at high recall rates (recall is the proportion of identified positive cases of all positives). This model serves healthcare and particularly it is predicting on potentially lethal outcomes, so the high recall rate is extremely important, however the high precision is also needed, as that false positives are buden on the healthcare system, and nonetheless it is an additional stress on the patients.
